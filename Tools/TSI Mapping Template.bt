@@ -2,7 +2,7 @@
 //--- 010 Editor v5.0.2 Binary Template
 //
 // File: Native Instruments Traktor Pro .TSI Controller Mapping File Template
-// Author: Ivan Zlatev <ivan@ivanz.com>
+// Author: Ivan Zlatev <ivan AT ivanz.com>
 // Revision: Refer to Git commit history for revision information
 // Purpose: Defines the data structure for the Traktor Pro .tsi file format used
 //          for Controller Mapping
