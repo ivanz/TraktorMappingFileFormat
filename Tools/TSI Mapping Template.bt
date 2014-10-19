@@ -77,17 +77,6 @@ typedef struct FrameHeader {
     int Size;
 };
 
-typedef struct FrameContainer {
-    FrameHeader Header;
-};
-
-typedef struct FrameContainerWithThreeValues {
-    FrameHeader Header;
-    DWORD Unknown1;
-    DWORD Unknown2;
-    DWORD Unknown3;
-};
-
 typedef struct DVST {
     FrameHeader Header; // DVST
     byte Content[Header.Size];
@@ -101,18 +90,18 @@ typedef struct DIOI {
 
 
 typedef struct DeviceType {
-    FrameHeader Header;
+    FrameHeader Header; // DEVI
     int NameLength;
     wchar_t Name[NameLength];
 };
 
 typedef struct DeviceTragetInfo {
-    FrameHeader Header;
+    FrameHeader Header; // DDIF
     DeviceTarget Target;
 };
 
 typedef struct VersionInfo {
-    FrameHeader Header;
+    FrameHeader Header; // DDIV
     int VersionLength;
     wchar_t Version[VersionLength];
     int MappingFileRevision;
@@ -222,7 +211,7 @@ typedef struct Mapping {
 };
 
 typedef struct MappingsList {
-    FrameContainer Container; // CMAS
+    FrameHeader Header; // CMAS
     int NumberOfMappings;
     Mapping Mappings[NumberOfMappings] <optimize=false>;;
 };
