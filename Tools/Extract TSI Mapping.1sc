@@ -1,0 +1,71 @@
+//---------- 010 Editor v3.x Script File ------------------------------
+// File:     Extract TSI Mapping (based on Decode Base64)
+// Author:   Ivan Zlatev <ivan@ivanz.com> (based on work by Bernhard Foltz, Munich, Germany)
+// Revision: 19.10.2014 (based on Decode Base64 revision 1 from 5 Jul 2009)
+// Purpose:  When ran on a .tsi file - extracts the binary data in a new temporary tab 
+//           enabling the TSI Template to be run.
+//---------------------------------------------------------------------
+
+const string title = "Extract TSI Mapping";
+
+int64 adr, siz, out;
+int actfile, newfile, data, bits;
+ubyte b;
+string s;
+
+// At least, one file must be open
+if (FileCount() == 0) {
+  MessageBox(idOk, title, "No file is open.");
+  return -1;
+}
+
+string lookFor = "<Entry Name=\"DeviceIO.Config.Controller\" Type=\"3\" Value=\"";
+adr = FindFirst(lookFor) + Strlen(lookFor);
+
+siz = FindFirst("\"", true, false, false, 0.0, 1, adr);
+
+// At least, one byte should be processed
+if (siz == 0) {
+  MessageBox(idOk, title, "No bytes to process.");
+  return -1;
+}
+
+// create new file
+actfile = GetFileNum();
+newfile = FileNew("Hex");
+FileSelect(actfile);
+// read data, 6 bits per input byte
+data = 0; bits = 0; out = 0;
+while (siz > 0) {
+  b = ReadUByte(adr); adr++; siz--;
+  if ((b >= 'A') && (b <= 'Z')) {
+    data = (data << 6) | (b - 'A'); bits += 6;
+  } 
+  else if ((b >= 'a') && (b <= 'z')) {
+    data = (data << 6) | (b - 'a' + 26); bits += 6;
+  } 
+  else if ((b >= '0') && (b <= '9')) {
+    data = (data << 6) | (b - '0' + 52); bits += 6;
+  } 
+  else if ((b == '+') || (b == '-')) {
+    data = (data << 6) | 62; bits += 6;
+  }
+  else if ((b == '/') || (b == '_')) {
+    data = (data << 6) | 63; bits += 6;
+  }
+  else if (b > ' ') {
+    siz = -1;
+    break;
+  }
+  // write data
+  if (bits >= 8) {
+    bits -= 8;
+    FileSelect(newfile);
+    WriteUByte(out, data >> bits); out++;
+    FileSelect(actfile);
+  }
+}
+
+// new file ready
+FileSelect(newfile);
+SetCursorPos(FileSize());

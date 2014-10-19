@@ -1,0 +1,275 @@
+//--------------------------------------
+//--- 010 Editor v5.0.2 Binary Template
+//
+// File: Native Instruments Traktor Pro .TSI Controller Mapping File Template
+// Author: Ivan Zlatev <ivan@ivanz.com>
+// Revision: Refer to Git commit history for revision information
+// Purpose: Defines the data structure for the Traktor Pro .tsi file format used
+//          for Controller Mapping
+//--------------------------------------
+
+BigEndian();
+
+enum <int> DeviceTarget { 
+    Focus = 0, 
+    DeckA = 1, 
+    DeckB = 2, 
+    DeckC = 3, 
+    DeckD = 4
+};
+
+enum <int> MidiEncoderMode {
+    _3Fh_41h = 0,
+    _7Fh_01h = 1,
+};
+
+enum <int> MappingTargetDeck { 
+    DeviceTargetDeck = -1,
+    AorFX1orRemixDeck1Slot1OrGlobal = 0,
+    BorFX2orRemixDeck1Slot2 = 1,
+    CorFX3orRemixDeck1Slot3 = 2,
+    DorFX4orRemixDeck1Slot4 = 3,
+    RemixDeck2Slot1 = 4,
+    RemixDeck2Slot2 = 5,
+    RemixDeck2Slot3 = 6,
+    RemixDeck2Slot4 = 7,
+    RemixDeck3Slot1 = 8,
+    RemixDeck3Slot2 = 9,
+    RemixDeck3Slot3 = 10,
+    RemixDeck3Slot4 = 11,
+    RemixDeck4Slot1 = 12,
+    RemixDeck4Slot2 = 13,
+    RemixDeck4Slot3 = 14,
+    RemixDeck4Slot4 = 15,
+};
+
+enum <int> MappingInteractionMode {
+    Toggle = 1,
+    Hold = 2,
+    Direct = 3,
+    Relative = 4,
+    Increment = 5,
+    Decrement = 6,
+    Reset = 7,
+    Output = 8,
+};
+
+enum <int> MappingControllerType {
+    Button = 0,
+    FaderOrKnob = 1,
+    Encoder = 2,
+    LED = 65535,
+};
+
+
+// Big endian values !!
+enum <DWORD> MappingResolution {
+    Fine = 0x3C800000,
+    Min = 0x3D800000,
+    Default = 0x3D800000,
+    Coarse = 0x3E000000,
+    Switch = 0x3F000000,
+};
+
+typedef struct FrameHeader {
+    char Id[4];
+    // The size is sizeof(FrameHeader) + size of the content of the frame
+    int Size;
+};
+
+typedef struct FrameContainer {
+    FrameHeader Header;
+};
+
+typedef struct FrameContainerWithThreeValues {
+    FrameHeader Header;
+    DWORD Unknown1;
+    DWORD Unknown2;
+    DWORD Unknown3;
+};
+
+typedef struct DVST {
+    FrameHeader Header; // DVST
+    byte Content[Header.Size];
+};
+
+typedef struct DIOI {
+    FrameHeader Header; // DIOI
+    // Seems to be a constant 1
+    int Unknown;
+};
+
+
+typedef struct DeviceType {
+    FrameHeader Header;
+    int NameLength;
+    wchar_t Name[NameLength];
+};
+
+typedef struct DeviceTragetInfo {
+    FrameHeader Header;
+    DeviceTarget Target;
+};
+
+typedef struct VersionInfo {
+    FrameHeader Header;
+    int VersionLength;
+    wchar_t Version[VersionLength];
+    int MappingFileRevision;
+};
+
+typedef struct MappingFileComment {
+    FrameHeader Header; // DDIC
+    int CommentLength;
+    wchar_t Comment[CommentLength];
+};
+
+typedef struct MidiNoteBinding {
+    FrameHeader Header; // DCBM id
+    int Id;
+    int MidiNoteLength;
+    wchar_t MidiNote[MidiNoteLength];
+};
+
+// The first DCBM entry provides the count
+// The following DCBM entries provide the data
+typedef struct MidiNoteBindingList {
+    FrameHeader Header; // DCBM id
+    int NumberOfBindings;
+    MidiNoteBinding Entries[NumberOfBindings] <optimize=false>;
+};
+
+typedef struct MidiDefinition {
+    FrameHeader Header; // DCDT
+    int MidiNoteLength;
+    wchar_t MidiNote[MidiNoteLength];
+    DWORD Unknown1;
+    DWORD Unknown2;
+    float Velocity;
+    // Updated by Traktor Pro UI when changed
+    MidiEncoderMode EncoderMode;
+    DWORD Unknown5;
+};
+
+typedef struct MidiOutDefinitions {
+    FrameHeader Header; // DDCO
+    int NumberOfEntries;
+    MidiDefinition Definitions[NumberOfEntries] <optimize=false>;
+};
+
+typedef struct MidiInDefinitions {
+    FrameHeader Header; // DDCI
+    int NumberOfEntries;
+    MidiDefinition Definitions[NumberOfEntries] <optimize=false>;
+};
+
+typedef struct MidiDefinitionsContainer {
+    FrameHeader Header; // DDDC
+    MidiInDefinitions In;
+    MidiOutDefinitions Out;
+};
+
+typedef struct MappingSettings {
+    FrameHeader Header; // CMAD
+    // Seems to be always a constant 4
+    DWORD Unknown1;
+    MappingControllerType ControllerType;
+    MappingInteractionMode InteractionMode;
+    MappingTargetDeck Deck;
+    int AutoRepeat;
+    int Invert;
+    int SoftTakeover;
+    // 1% in the Traktor UI corresponds to 0.5f
+    // Traktor sets this to 300% / 15f when 
+    // in Interaction mode is Direct
+    float RotarySensitivity;
+    float RotaryAcceleration;
+    DWORD Unknown10;
+    DWORD Unknown11;
+    float SetValueTo;
+    // ?
+    int CommentLength;
+    wchar_t Comment[CommentLength];
+    // Traktor Control Id
+    DWORD ModifierOneId;
+    DWORD Unknown15;
+    DWORD ModifierOneValue;
+    DWORD ModifierTwoId;
+    DWORD Unknown18;
+    DWORD ModifierTwoValue;
+    DWORD Unknown20;
+    float LedMinControllerRange;
+    DWORD Unknown22;
+    float LedMaxControllerRange;
+    int LedMinMidiRange;
+    int LedMaxMidiRange;
+    int LedInvert;
+    int LedBlend;
+    DWORD Unknown29;
+    // this field is actually a float under the hood
+    MappingResolution Resolution;
+    DWORD Unknown30;
+};
+
+typedef struct Mapping {
+    FrameHeader Header; // CMAI
+    int MidiNoteBindingId;
+    // Seems to always be 0x00000000
+    DWORD Unknown1;
+    // Basically what UI Control this mapping is for
+    int TraktorControlId;
+    MappingSettings Settings;
+};
+
+typedef struct MappingsList {
+    FrameContainer Container; // CMAS
+    int NumberOfMappings;
+    Mapping Mappings[NumberOfMappings] <optimize=false>;;
+};
+
+typedef struct MappingsContainer {
+    FrameHeader Header; // DDCB
+    MappingsList Mappings;
+};
+
+typedef struct DevicePorts {
+    FrameHeader Header; // DDPT
+    int InPortNameLength;
+    wchar_t InPortName[InPortNameLength] <optimize=false>;
+    int OutPortNameLength;
+    wchar_t OutPortName[OutPortNameLength] <optimize=false>;
+};
+
+typedef struct DeviceData
+{
+    FrameHeader Header; // DDAT
+    DeviceTragetInfo Target;
+    VersionInfo Version;
+    MappingFileComment Comment;
+    DevicePorts Ports;
+    MidiDefinitionsContainer MidiDefinitions;
+    MappingsContainer Mappings;
+    MidiNoteBindingList MidiBindings;
+    DVST Unknown;
+};
+
+typedef struct Device {
+    DeviceType Type;
+    DeviceData Data;
+};
+
+typedef struct DevicesList {
+    FrameHeader Header;
+    // Seems to be a constant 1
+    int NumberOfDevices;
+    Device Devices[NumberOfDevices] <optimize=false>;
+};
+
+
+typedef struct DeviceMappingsContainer {
+    FrameHeader Header;
+    DIOI DIOI_Unknown;
+    DevicesList Devices <optimize=false>;
+};
+
+DeviceMappingsContainer tsi;
