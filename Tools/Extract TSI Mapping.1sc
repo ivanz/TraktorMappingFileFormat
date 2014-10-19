@@ -1,6 +1,6 @@
 //---------- 010 Editor v3.x Script File ------------------------------
 // File:     Extract TSI Mapping (based on Decode Base64)
-// Author:   Ivan Zlatev <ivan@ivanz.com> (based on work by Bernhard Foltz, Munich, Germany)
+// Author:   Ivan Zlatev <ivan AT ivanz.com> (based on work by Bernhard Foltz, Munich, Germany)
 // Revision: 19.10.2014 (based on Decode Base64 revision 1 from 5 Jul 2009)
 // Purpose:  When ran on a .tsi file - extracts the binary data in a new temporary tab 
 //           enabling the TSI Template to be run.
