@@ -217,7 +217,7 @@ typedef struct MappingsList {
 
 typedef struct MappingsContainer {
     FrameHeader Header; // DDCB
-    MappingsList Mappings;
+    MappingsList List;
 };
 
 typedef struct DevicePorts {
