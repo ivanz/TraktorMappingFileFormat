@@ -95,7 +95,7 @@ typedef struct DeviceType {
     wchar_t Name[NameLength];
 };
 
-typedef struct DeviceTragetInfo {
+typedef struct DeviceTargetInfo {
     FrameHeader Header; // DDIF
     DeviceTarget Target;
 };
@@ -231,7 +231,7 @@ typedef struct DevicePorts {
 typedef struct DeviceData
 {
     FrameHeader Header; // DDAT
-    DeviceTragetInfo Target;
+    DeviceTargetInfo Target;
     VersionInfo Version;
     MappingFileComment Comment;
     DevicePorts Ports;
