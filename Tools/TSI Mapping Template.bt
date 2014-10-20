@@ -176,7 +176,6 @@ typedef struct MappingSettings {
     DWORD Unknown10;
     DWORD Unknown11;
     float SetValueTo;
-    // ?
     int CommentLength;
     wchar_t Comment[CommentLength];
     // Traktor Control Id
@@ -213,7 +212,7 @@ typedef struct Mapping {
 typedef struct MappingsList {
     FrameHeader Header; // CMAS
     int NumberOfMappings;
-    Mapping Mappings[NumberOfMappings] <optimize=false>;;
+    Mapping Mappings[NumberOfMappings] <optimize=false>;
 };
 
 typedef struct MappingsContainer {
