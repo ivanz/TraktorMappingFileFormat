@@ -179,12 +179,12 @@ typedef struct MappingSettings {
     int CommentLength;
     wchar_t Comment[CommentLength];
     // Traktor Control Id
-    DWORD ModifierOneId;
+    int ModifierOneId;
     DWORD Unknown15;
-    DWORD ModifierOneValue;
-    DWORD ModifierTwoId;
+    int ModifierOneValue;
+    int ModifierTwoId;
     DWORD Unknown18;
-    DWORD ModifierTwoValue;
+    int ModifierTwoValue;
     DWORD Unknown20;
     float LedMinControllerRange;
     DWORD Unknown22;
