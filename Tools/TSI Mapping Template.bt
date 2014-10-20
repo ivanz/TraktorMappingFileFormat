@@ -125,7 +125,7 @@ typedef struct MidiNoteBinding {
 typedef struct MidiNoteBindingList {
     FrameHeader Header; // DCBM id
     int NumberOfBindings;
-    MidiNoteBinding Entries[NumberOfBindings] <optimize=false>;
+    MidiNoteBinding Bindings[NumberOfBindings] <optimize=false>;
 };
 
 typedef struct MidiDefinition {
