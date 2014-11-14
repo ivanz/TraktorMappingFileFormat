@@ -89,12 +89,6 @@ typedef struct DIOI {
 };
 
 
-typedef struct DeviceType {
-    FrameHeader Header; // DEVI
-    int NameLength;
-    wchar_t Name[NameLength];
-};
-
 typedef struct DeviceTargetInfo {
     FrameHeader Header; // DDIF
     DeviceTarget Target;
@@ -242,7 +236,9 @@ typedef struct DeviceData
 };
 
 typedef struct Device {
-    DeviceType Type;
+    FrameHeader Header; // DEVI
+    int NameLength;
+    wchar_t Name[NameLength];
     DeviceData Data;
 };
 
