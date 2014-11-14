@@ -212,6 +212,7 @@ typedef struct MappingsList {
 typedef struct MappingsContainer {
     FrameHeader Header; // DDCB
     MappingsList List;
+    MidiNoteBindingList MidiBindings;
 };
 
 typedef struct DevicePorts {
@@ -231,7 +232,6 @@ typedef struct DeviceData
     DevicePorts Ports;
     MidiDefinitionsContainer MidiDefinitions;
     MappingsContainer Mappings;
-    MidiNoteBindingList MidiBindings;
     DVST Unknown;
 };
 
