@@ -131,7 +131,10 @@ typedef struct MidiDefinition {
     float Velocity;
     // Updated by Traktor Pro UI when changed
     MidiEncoderMode EncoderMode;
-    DWORD Unknown5;
+    // In the case of Native Instruments devices seems to identify the 
+    // control Id. However this control Id will be the same for e.g. both 
+    // left and right Shift keys (Kontrol S4). Otherwise 0xFFFFFFFF
+    int ControlId;
 };
 
 typedef struct MidiOutDefinitions {
