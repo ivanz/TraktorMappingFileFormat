@@ -71,6 +71,11 @@ enum <DWORD> MappingResolution {
     Switch = 0x3F000000,
 };
 
+enum <int> MappingType {
+    In = 0,
+    Out = 1,
+};
+
 typedef struct FrameHeader {
     char Id[4];
     // The size is sizeof(FrameHeader) + size of the content of the frame
@@ -199,8 +204,7 @@ typedef struct MappingSettings {
 typedef struct Mapping {
     FrameHeader Header; // CMAI
     int MidiNoteBindingId;
-    // Seems to always be 0x00000000
-    DWORD Unknown1;
+    MappingType Type;
     // Basically what UI Control this mapping is for
     int TraktorControlId;
     MappingSettings Settings;
