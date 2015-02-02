@@ -78,7 +78,7 @@ enum <int> MappingType {
 
 typedef struct FrameHeader {
     char Id[4];
-    // The size is sizeof(FrameHeader) + size of the content of the frame
+    // The total number of bytes of content that follow
     int Size;
 };
 
