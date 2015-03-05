@@ -6,6 +6,10 @@ Documentation for the reverse-engineered .tsi file format used by Native Instrum
 
 All documentation is available here: https://github.com/ivanz/TraktorMappingFileFormat/wiki/
 
+## Contributing
+
+Please open an issue with any documentation adjustments/other.
+
 ## Tools and Samples
 
 All tools used to reverse-engineer the file format (useful for contributing back to this project) are available in the repository.
